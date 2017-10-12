@@ -1,3 +1,7 @@
+# Original Code Base 
+All the original code base files from HackerHouseYT can be found at: https://github.com/HackerHouseYT/Smart-Mirror/blob/master/README.md
+
+
 # Smart-Mirror
 Raspberry powered mirror which can display the news, weather, and time.
 
