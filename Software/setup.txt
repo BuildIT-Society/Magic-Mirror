@@ -1,0 +1,8 @@
+$ touch .gitignore
+$ echo "config.py" >> .gitignore
+$ echo "config.pyc" >> .gitignore 
+$ git add .gitignore
+$ git add <any other files>
+$ git commit -m "your message here"
+$ git push
+
