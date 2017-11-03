@@ -29,7 +29,7 @@ xlarge_text_size = 94
 large_text_size = 48
 medium_text_size = 28
 small_text_size = 18
-
+counter = 0 # global variable for testing
 
 @contextmanager
 def setlocale(name): #thread proof function to work with locale
@@ -317,6 +317,7 @@ class FullscreenWindow:
         self.debug = Debugger(self.topFrame)
         self.debug.pack(side=RIGHT, anchor=N, padx=70, pady=150)
 
+
         # calender - removing for now
         # self.calender = Calendar(self.bottomFrame)
         # self.calender.pack(side = RIGHT, anchor=S, padx=100, pady=60)
@@ -345,8 +346,12 @@ class Debugger(Frame):
         # set initial anchor for screen, then in main set other sides
         self.label.pack(side=TOP, anchor=E)
 
-        x += 1
-        self.message = "Hello world count: %d" % x
+        # increase global variable by 1
+        global counter
+        counter += 1
+        
+        # print message
+        self.message = "Hello world count: %d" % counter
         self.msg = Label(self, text=self.message, font=("Times New Roman", medium_text_size), fg=mycolor, bg="brown")
         self.msg.pack(side=TOP, anchor=N)
 
