@@ -30,6 +30,7 @@ large_text_size = 48
 medium_text_size = 28
 small_text_size = 18
 
+
 @contextmanager
 def setlocale(name): #thread proof function to work with locale
     with LOCALE_LOCK:
@@ -57,7 +58,7 @@ icon_lookup = {
     'hail': "assests/Hail.png"  # hail
 }
 
-
+# displays current time, day of the week, and date
 class Clock(Frame):
     def __init__(self, parent, *args, **kwargs):
         Frame.__init__(self, parent, bg='black')
@@ -99,7 +100,7 @@ class Clock(Frame):
             # could use >200 ms, but display gets jerky
             self.timeLbl.after(200, self.tick)
 
-
+# displays local weather
 class Weather(Frame):
     def __init__(self, parent, *args, **kwargs):
         Frame.__init__(self, parent, bg='black')
@@ -207,7 +208,7 @@ class Weather(Frame):
     def convert_kelvin_to_fahrenheit(kelvin_temp):
         return 1.8 * (kelvin_temp - 273) + 32
 
-
+# displays news to screen
 class News(Frame):
     def __init__(self, parent, *args, **kwargs):
         Frame.__init__(self, parent, *args, **kwargs)
@@ -218,6 +219,7 @@ class News(Frame):
         self.headlinesContainer = Frame(self, bg="black")
         self.headlinesContainer.pack(side=TOP)
         self.get_headlines()
+
 
     def get_headlines(self):
         try:
@@ -290,8 +292,8 @@ class CalendarEvent(Frame):
         self.eventNameLbl.pack(side=TOP, anchor=E)
 
 
+# class for configure screen
 class FullscreenWindow:
-
     def __init__(self):
         self.tk = Tk()
         self.tk.configure(background='black')
@@ -311,6 +313,10 @@ class FullscreenWindow:
         # news
         self.news = News(self.bottomFrame)
         self.news.pack(side=LEFT, anchor=S, padx=100, pady=60)
+        # debugging
+        self.debug = Debugger(self.topFrame)
+        self.debug.pack(side=RIGHT, anchor=N, padx=70, pady=150)
+
         # calender - removing for now
         # self.calender = Calendar(self.bottomFrame)
         # self.calender.pack(side = RIGHT, anchor=S, padx=100, pady=60)
@@ -324,6 +330,26 @@ class FullscreenWindow:
         self.state = False
         self.tk.attributes("-fullscreen", False)
         return "break"
+
+# used for debugging to screen
+class Debugger(Frame):
+    def __init__(self, parent, *args, **kwargs):
+        Frame.__init__(self, parent, *args, **kwargs)
+        self.config(bg='black')
+
+        mycolor = '#40E0D0'  # hex color variable
+
+        self.title = 'Testing' # test print message
+        #  Label() is func to print to screen, text=<what is printed to screen>, fg=foreground color, bg=background color
+        self.label = Label(self, text=self.title, font=('Helvetica', large_text_size), fg="red", bg="blue")
+        # set initial anchor for screen, then in main set other sides
+        self.label.pack(side=TOP, anchor=E)
+
+        x += 1
+        self.message = "Hello world count: %d" % x
+        self.msg = Label(self, text=self.message, font=("Times New Roman", medium_text_size), fg=mycolor, bg="brown")
+        self.msg.pack(side=TOP, anchor=N)
+
 
 if __name__ == '__main__':
     w = FullscreenWindow()
