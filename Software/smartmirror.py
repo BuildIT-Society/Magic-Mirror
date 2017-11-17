@@ -293,7 +293,7 @@ class CalendarEvent(Frame):
 
 
 # class for configure screen
-class FullscreenWindow:
+class FullscreenWindow():
     def __init__(self):
         self.tk = Tk()
         self.tk.configure(background='black')
@@ -302,8 +302,10 @@ class FullscreenWindow:
         self.topFrame.pack(side = TOP, fill=BOTH, expand = YES)
         self.bottomFrame.pack(side = BOTTOM, fill=BOTH, expand = YES)
         self.state = False
+        # keyboard bindings
         self.tk.bind("<Return>", self.toggle_fullscreen)
         self.tk.bind("<Escape>", self.end_fullscreen)
+
         # clock
         self.clock = Clock(self.topFrame)
         self.clock.pack(side=RIGHT, anchor=N, padx=100, pady=60)
@@ -316,7 +318,7 @@ class FullscreenWindow:
         # debugging
         self.debug = Debugger(self.topFrame)
         self.debug.pack(side=RIGHT, anchor=N, padx=70, pady=150)
-
+        self.tk.bind("<j>", self.debug.incCount)
 
         # calender - removing for now
         # self.calender = Calendar(self.bottomFrame)
@@ -337,6 +339,7 @@ class Debugger(Frame):
     def __init__(self, parent, *args, **kwargs):
         Frame.__init__(self, parent, *args, **kwargs)
         self.config(bg='black')
+        # every time <j> is pressed, the incCount func is called
 
         mycolor = '#40E0D0'  # hex color variable
 
@@ -347,15 +350,38 @@ class Debugger(Frame):
         self.label.pack(side=TOP, anchor=E)
 
         # increase global variable by 1
-        global counter
-        counter += 1
-        
+        #global counter
+        self.count = 0
+
         # print message
-        self.message = "Hello world count: %d" % counter
+        self.message = "Hello world count: %d" % self.count
         self.msg = Label(self, text=self.message, font=("Times New Roman", medium_text_size), fg=mycolor, bg="brown")
         self.msg.pack(side=TOP, anchor=N)
+        # call
+        #self.printer()
+
+    def printer(self):
+        print("testing %d" % self.count)
+
+        self.message = "Hello world count: %d" % self.count
+        self.msg.config(text=self.message)
+
+        #self.msg.after(1000, self.printer)
+
+    def incCount(self, parent):
+        #self.state = not self.state  # Just toggling the boolean
+        #self.tk.attributes("-fullscreen", self.state)
+        self.count += 1
+        self.printer()
+        #return "break"
 
 
+# main
 if __name__ == '__main__':
+
+
     w = FullscreenWindow()
+    x = 0
+    #root = Tk()
+    #root.after(1000, printer)  # reschedule event in 2 seconds
     w.tk.mainloop()
