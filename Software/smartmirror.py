@@ -315,10 +315,21 @@ class FullscreenWindow():
         # news
         self.news = News(self.bottomFrame)
         self.news.pack(side=LEFT, anchor=S, padx=100, pady=60)
+        # Menu
+        self.menu = Menu(self.topFrame)
+        self.menu.pack(side=TOP, anchor=E, padx=40, pady=40)
+        self.tk.bind("<j>", self.menu.incCount)
+        self.tk.bind("<k>", self.menu.decCount)
+        self.tk.bind("<i>", self.menu.show_menu)
+        self.tk.bind("<o>", self.menu.hide_menu)
         # debugging
-        self.debug = Debugger(self.topFrame)
-        self.debug.pack(side=RIGHT, anchor=N, padx=70, pady=150)
-        self.tk.bind("<j>", self.debug.incCount)
+        #self.debug = Debugger(self.topFrame)
+        #self.debug.pack(side=RIGHT, anchor=N, padx=70, pady=150)
+        #self.tk.bind("<j>", self.debug.incCount)
+        #self.tk.bind("<k>", self.debug.decCount)
+        #self.tk.bind("<i>", self.debug.show_menu)
+        #self.tk.bind("<o>", self.debug.hide_menu)
+
 
         # calender - removing for now
         # self.calender = Calendar(self.bottomFrame)
@@ -335,12 +346,66 @@ class FullscreenWindow():
         return "break"
 
 # used for debugging to screen
+class Menu(Frame):
+    def __init__(self, parent, *args, **kwargs):
+        Frame.__init__(self, parent, *args, **kwargs)
+        self.config(bg='black')
+        # every time <j> is pressed, the incCount func is called
+
+        # allows actions to be called on object
+        self.enabled = True;
+        mycolor = '#707070'  # hex color variable
+
+        self.title = 'Menu' # test print message
+        #  Label() is func to print to screen, text=<what is printed to screen>, fg=foreground color, bg=background color
+        self.label = Label(self, text=self.title, font=('Helvetica', large_text_size), fg="white", bg="grey")
+        # set initial anchor for screen, then in main set other sides
+        self.label.pack(side=LEFT, anchor=E)
+
+        self.count = 0
+
+        # print message
+        self.message = "Menu Select: %d" % self.count
+        self.msg = Label(self, text=self.message, font=("Times New Roman", medium_text_size), fg=mycolor, bg="brown")
+        self.msg.pack(side=LEFT, anchor=N)
+
+
+    def printer(self):
+        print("testing %d" % self.count)
+        self.message = "Hello world count: %d" % self.count
+        self.msg.config(text=self.message)
+
+    def incCount(self, parent):
+        if(self.enabled):
+            self.count += 1
+            self.printer()
+
+    def decCount(self, parent):
+        if(self.enabled):
+            self.count -= 1
+            self.printer()
+
+    def show_menu(self, event=None):
+        self.enabled = True
+        self.label.pack()
+        self.msg.pack()
+
+    def hide_menu(self, event=None):
+        self.enabled = False
+        self.label.pack_forget()
+        self.msg.pack_forget()
+
+
+
+# used for debugging to screen
 class Debugger(Frame):
     def __init__(self, parent, *args, **kwargs):
         Frame.__init__(self, parent, *args, **kwargs)
         self.config(bg='black')
         # every time <j> is pressed, the incCount func is called
 
+        # allows actions to be called on object
+        self.enabled = True;
         mycolor = '#40E0D0'  # hex color variable
 
         self.title = 'Testing' # test print message
@@ -349,8 +414,6 @@ class Debugger(Frame):
         # set initial anchor for screen, then in main set other sides
         self.label.pack(side=TOP, anchor=E)
 
-        # increase global variable by 1
-        #global counter
         self.count = 0
 
         # print message
@@ -369,17 +432,28 @@ class Debugger(Frame):
         #self.msg.after(1000, self.printer)
 
     def incCount(self, parent):
-        #self.state = not self.state  # Just toggling the boolean
-        #self.tk.attributes("-fullscreen", self.state)
-        self.count += 1
-        self.printer()
-        #return "break"
+        if(self.enabled):
+            self.count += 1
+            self.printer()
+
+    def decCount(self, parent):
+        if(self.enabled):
+            self.count -= 1
+            self.printer()
+
+    def show_menu(self, event=None):
+        self.enabled = True
+        self.label.pack()
+        self.msg.pack()
+
+    def hide_menu(self, event=None):
+        self.enabled = False
+        self.label.pack_forget()
+        self.msg.pack_forget()
 
 
 # main
 if __name__ == '__main__':
-
-
     w = FullscreenWindow()
     x = 0
     #root = Tk()
